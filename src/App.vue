@@ -6,7 +6,7 @@
     <v-container>
       <v-row align="center" justify="center">
         <v-col >
-          <v-card class="mx-auto" max-width="400" >
+          <v-card class="mx-auto" max-width="300" >
               <v-img src="./assets/pt-logo.png"></v-img>
 
               <v-card-title>
@@ -27,13 +27,19 @@
         <v-col>
           <div>
             <!-- <v-text-field label="Your Text" :rules="rules"> -->
-            <v-text-field label="Your Text">
-            </v-text-field>
+            <v-textarea
+              label="Your text"
+              auto-grow
+              outlined
+              row-height="15"
+              v-model='inputText'
+            ></v-textarea>
+            <p hidden> {{textRealTime}} </p>
           </div>
         </v-col>
         <!-- end-filter -->
         <v-col>
-          <v-card class="mx-auto" max-width="400">
+          <v-card class="mx-auto" max-width="300">
             <v-img src="./assets/tf.png"></v-img>
 
             <v-card-title>
@@ -66,8 +72,14 @@ export default {
 
   components: {
   },
-
+  computed: {
+    textRealTime: function () {
+      console.log('in computed this.text', this.inputText)
+      return this.inputText
+    }
+  },
   data: () => ({
+    inputText: '',
     maxlength: 50,
     rules: [
       value => (value && value.length < this.maxlength)
