@@ -68,7 +68,7 @@ export default {
   },
 
   data: () => ({
-    maxlength: 100,
+    maxlength: 50,
     rules: [
       value => (value && value.length < this.maxlength)
     ],
