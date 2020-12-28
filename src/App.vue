@@ -68,7 +68,7 @@ export default {
   },
 
   data: () => ({
-    maxlength: 100,
+    maxlength: 50,
     rules: [
       value => (value && value.length < this.maxlength)
     ],
@@ -80,6 +80,10 @@ export default {
     tfModel: null
   }),
   async mounted () {
+    // test replace
+    const text = 'T$his *is -a _t!ext wiéth so@me sp)ecia-l- char\'act"er\'s'
+    const tokens = this.sentenceTokenizer(text)
+    console.log('Tokens: ', tokens)
     await this.loadONNX()
     console.log('ONNX loaded')
     await this.loadTF()
@@ -105,6 +109,13 @@ export default {
       data.print()
       const out = this.tfModel.predict(data)
       out.print()
+    },
+    sentenceTokenizer (sentence) {
+      const filter = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n'.split('')
+      filter.map(f => {
+        sentence = sentence.replaceAll(f, '')
+      })
+      return sentence.split(' ')
     }
   }
 }
