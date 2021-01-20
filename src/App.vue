@@ -6,7 +6,7 @@
     <v-container>
       <v-row align="center" justify="center">
         <v-col >
-          <v-card class="mx-auto" max-width="400" >
+          <v-card class="mx-auto" max-width="100" >
               <v-img src="./assets/pt-logo.png"></v-img>
 
               <v-card-title>
@@ -27,13 +27,14 @@
         <v-col>
           <div>
             <!-- <v-text-field label="Your Text" :rules="rules"> -->
-            <v-text-field label="Your Text">
+            <v-text-field label="Your Text" v-model="text">
             </v-text-field>
+            RES - {{res}}
           </div>
         </v-col>
         <!-- end-filter -->
         <v-col>
-          <v-card class="mx-auto" max-width="400">
+          <v-card class="mx-auto" max-width="100">
             <v-img src="./assets/tf.png"></v-img>
 
             <v-card-title>
@@ -66,8 +67,9 @@ export default {
 
   components: {
   },
-
   data: () => ({
+    res: [999, 999],
+    text: '',
     maxlength: 50,
     rules: [
       value => (value && value.length < this.maxlength)
@@ -79,6 +81,12 @@ export default {
     // tf model
     tfModel: null
   }),
+  computed: {
+    res: function () {
+      console.log(this.text)
+      return this.res
+    }
+  },
   async mounted () {
     // test replace
     const text = 'T$his *is -a _t!ext wiéth so@me sp)ecia-l- char\'act"er\'s'
@@ -101,6 +109,7 @@ export default {
       var inputs = [new Tensor(new Int32Array([2, 9, 7, 4, 6, 5, 8, 1, 8, 2]), 'int32', [1, 10])]
       const out = await this.onnxSession.run(inputs)
       console.log('ONNX out ', out.values().next().value.data)
+      this.res[1] = out.values().next().value.data
     },
     async loadTF () {
       this.tfModel = await tf.loadLayersModel('tfjs-model/model.json')
@@ -108,7 +117,8 @@ export default {
       var data = tf.ones([1, 50])
       data.print()
       const out = this.tfModel.predict(data)
-      out.print()
+      console.log('tf out', out.dataSync())
+      this.res[0] = out.dataSync()
     },
     sentenceTokenizer (sentence) {
       const filter = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n'.split('')
